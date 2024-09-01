@@ -30,7 +30,7 @@ fi
 # CORRECT ARGUMENTS
 	
 # If specified directory does not exist, we return value 1 error
-# Else, we pass argument value to FILESDIR variable
+# Pass argument value to FILESDIR variable
 
 FILESDIR=$1
 if [ ! -d "$FILESDIR" ]
