@@ -14,9 +14,17 @@
 */
 void test_validate_my_username()
 {
-    /**
-     * TODO: Replace the line below with your code here as described above to verify your /conf/username.txt 
-     * config file and my_username() functions are setup properly
-     */
-    TEST_ASSERT_TRUE_MESSAGE(false,"AESD students, please fix me!");
+     	/**
+     	* Obtain the hard coded username from autotest-validate.c
+     	**/
+     	const char *github_username = my_username();
+     	/**
+     	* Obtain the test read username from conf/username.txt
+     	**/
+     	const char *test_github_username = malloc_username_from_conf_file();
+     	/**
+     	* Compare the 2 strings for differing chars
+     	* Format: TEST_ASSERT_EQUAL_STRING_MESSAGE(expected, actual, message)
+     	**/
+	TEST_ASSERT_EQUAL_STRING_MESSAGE(github_username, test_github_username, "Unable to validate username! Mismatch detected.");	
 }
