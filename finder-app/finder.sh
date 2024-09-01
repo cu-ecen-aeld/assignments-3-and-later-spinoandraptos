@@ -2,7 +2,7 @@
 # Script that helps look for matching lines within files of a directory on the Linux filesystem
 # Author: Juncheng Man
 
-# Take in user arguments for the path of directory to search under and the text string to match in all files
+# Take in user arguments for the path of directory to search under and the text string to match in all files in directory and sub-directories
 
 # ERROR CASES
 
