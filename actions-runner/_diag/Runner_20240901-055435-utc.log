@@ -1,0 +1,334 @@
+[2024-09-01 05:54:35Z INFO HostContext] No proxy settings were found based on environmental variables (http_proxy/https_proxy/HTTP_PROXY/HTTPS_PROXY)
+[2024-09-01 05:54:35Z INFO HostContext] Well known directory 'Bin': '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/bin'
+[2024-09-01 05:54:35Z INFO HostContext] Well known directory 'Root': '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner'
+[2024-09-01 05:54:35Z INFO HostContext] Well known config file 'Credentials': '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/.credentials'
+[2024-09-01 05:54:35Z INFO HostContext] Well known directory 'Bin': '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/bin'
+[2024-09-01 05:54:35Z INFO HostContext] Well known directory 'Root': '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner'
+[2024-09-01 05:54:35Z INFO HostContext] Well known config file 'Runner': '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/.runner'
+[2024-09-01 05:54:35Z INFO Listener] Runner is built for Linux (X64) - linux-x64.
+[2024-09-01 05:54:35Z INFO Listener] RuntimeInformation: Linux 6.8.0-40-generic #40~22.04.3-Ubuntu SMP PREEMPT_DYNAMIC Tue Jul 30 17:30:19 UTC 2.
+[2024-09-01 05:54:35Z INFO Listener] Version: 2.319.1
+[2024-09-01 05:54:35Z INFO Listener] Commit: bc6614c04d3ddc20e5ca5d5a87ae2b58dda322ec
+[2024-09-01 05:54:35Z INFO Listener] Culture: en-SG
+[2024-09-01 05:54:35Z INFO Listener] UI Culture: en-SG
+[2024-09-01 05:54:35Z INFO HostContext] Well known directory 'Bin': '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/bin'
+[2024-09-01 05:54:35Z INFO HostContext] Well known directory 'Root': '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner'
+[2024-09-01 05:54:35Z INFO Listener] Validating directory permissions for: '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner'
+[2024-09-01 05:54:35Z INFO CommandLineParser] Parse
+[2024-09-01 05:54:35Z INFO CommandLineParser] Parsing 1 args
+[2024-09-01 05:54:35Z INFO CommandLineParser] parsing argument
+[2024-09-01 05:54:35Z INFO CommandLineParser] HasArgs: False
+[2024-09-01 05:54:35Z INFO CommandLineParser] Adding Command: run
+[2024-09-01 05:54:35Z INFO Listener] Arguments parsed
+[2024-09-01 05:54:35Z INFO Runner] ExecuteCommand
+[2024-09-01 05:54:35Z INFO ConfigurationStore] currentAssemblyLocation: /home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/bin/Runner.Listener.dll
+[2024-09-01 05:54:35Z INFO HostContext] Well known directory 'Bin': '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/bin'
+[2024-09-01 05:54:35Z INFO ConfigurationStore] binPath: /home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/bin
+[2024-09-01 05:54:35Z INFO HostContext] Well known directory 'Bin': '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/bin'
+[2024-09-01 05:54:35Z INFO HostContext] Well known directory 'Root': '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner'
+[2024-09-01 05:54:35Z INFO ConfigurationStore] RootFolder: /home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner
+[2024-09-01 05:54:35Z INFO HostContext] Well known directory 'Bin': '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/bin'
+[2024-09-01 05:54:35Z INFO HostContext] Well known directory 'Root': '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner'
+[2024-09-01 05:54:35Z INFO HostContext] Well known config file 'Runner': '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/.runner'
+[2024-09-01 05:54:35Z INFO ConfigurationStore] ConfigFilePath: /home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/.runner
+[2024-09-01 05:54:35Z INFO HostContext] Well known directory 'Bin': '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/bin'
+[2024-09-01 05:54:35Z INFO HostContext] Well known directory 'Root': '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner'
+[2024-09-01 05:54:35Z INFO HostContext] Well known config file 'Credentials': '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/.credentials'
+[2024-09-01 05:54:35Z INFO ConfigurationStore] CredFilePath: /home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/.credentials
+[2024-09-01 05:54:35Z INFO HostContext] Well known directory 'Bin': '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/bin'
+[2024-09-01 05:54:35Z INFO HostContext] Well known directory 'Root': '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner'
+[2024-09-01 05:54:35Z INFO HostContext] Well known config file 'MigratedCredentials': '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/.credentials_migrated'
+[2024-09-01 05:54:35Z INFO ConfigurationStore] MigratedCredFilePath: /home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/.credentials_migrated
+[2024-09-01 05:54:35Z INFO HostContext] Well known directory 'Bin': '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/bin'
+[2024-09-01 05:54:35Z INFO HostContext] Well known directory 'Root': '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner'
+[2024-09-01 05:54:35Z INFO HostContext] Well known config file 'Service': '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/.service'
+[2024-09-01 05:54:35Z INFO ConfigurationStore] ServiceConfigFilePath: /home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/.service
+[2024-09-01 05:54:35Z INFO CommandSettings] Flag 'help': 'False'
+[2024-09-01 05:54:35Z INFO CommandSettings] Flag 'version': 'False'
+[2024-09-01 05:54:35Z INFO CommandSettings] Flag 'commit': 'False'
+[2024-09-01 05:54:35Z INFO CommandSettings] Flag 'check': 'False'
+[2024-09-01 05:54:35Z INFO CommandSettings] Command 'configure': 'False'
+[2024-09-01 05:54:35Z INFO CommandSettings] Command 'remove': 'False'
+[2024-09-01 05:54:35Z INFO CommandSettings] Command 'warmup': 'False'
+[2024-09-01 05:54:35Z INFO ConfigurationManager] LoadSettings
+[2024-09-01 05:54:35Z INFO ConfigurationStore] IsConfigured()
+[2024-09-01 05:54:35Z INFO ConfigurationStore] IsConfigured: True
+[2024-09-01 05:54:35Z INFO ConfigurationManager] Is configured: True
+[2024-09-01 05:54:35Z INFO ConfigurationStore] Read setting file: 312 chars
+[2024-09-01 05:54:35Z INFO ConfigurationManager] Settings Loaded
+[2024-09-01 05:54:35Z INFO ConfigurationStore] IsServiceConfigured()
+[2024-09-01 05:54:35Z INFO ConfigurationStore] IsServiceConfigured: False
+[2024-09-01 05:54:35Z INFO CommandSettings] Command 'run': 'True'
+[2024-09-01 05:54:35Z INFO ConfigurationStore] IsConfigured()
+[2024-09-01 05:54:35Z INFO ConfigurationStore] IsConfigured: True
+[2024-09-01 05:54:35Z INFO ConfigurationManager] Is configured: True
+[2024-09-01 05:54:35Z INFO Runner] Could not parse the argument value '' for StartupType. Defaulting to Manual
+[2024-09-01 05:54:35Z INFO Runner] Set runner startup type - Manual
+[2024-09-01 05:54:35Z INFO CommandSettings] Flag 'once': 'False'
+[2024-09-01 05:54:35Z INFO CommandSettings] Flag 'once': 'False'
+[2024-09-01 05:54:35Z INFO Runner] RunAsync
+[2024-09-01 05:54:35Z INFO ConfigurationManager] LoadSettings
+[2024-09-01 05:54:35Z INFO ConfigurationStore] IsConfigured()
+[2024-09-01 05:54:35Z INFO ConfigurationStore] IsConfigured: True
+[2024-09-01 05:54:35Z INFO ConfigurationManager] Is configured: True
+[2024-09-01 05:54:35Z INFO ConfigurationManager] Settings Loaded
+[2024-09-01 05:54:35Z INFO MessageListener] {
+  "AgentId": 2,
+  "AgentName": "Ubuntu",
+  "PoolId": 1,
+  "PoolName": "Default",
+  "ServerUrl": "https://pipelinesghubeus8.actions.githubusercontent.com/Y56YBF5KJ33FuMFWHvGDkHow1ze6lsmVxzxQLSD2H9W9HmvCKf/",
+  "GitHubUrl": "https://github.com/cu-ecen-aeld/assignment-1-spinoandraptos",
+  "WorkFolder": "_work"
+}
+[2024-09-01 05:54:35Z INFO MessageListener] Loading Credentials
+[2024-09-01 05:54:35Z INFO ConfigurationStore] HasCredentials()
+[2024-09-01 05:54:35Z INFO ConfigurationStore] stored True
+[2024-09-01 05:54:35Z INFO CredentialManager] GetCredentialProvider
+[2024-09-01 05:54:35Z INFO CredentialManager] Creating type OAuth
+[2024-09-01 05:54:35Z INFO CredentialManager] Creating credential type: OAuth
+[2024-09-01 05:54:35Z INFO HostContext] Well known directory 'Bin': '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/bin'
+[2024-09-01 05:54:35Z INFO HostContext] Well known directory 'Root': '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner'
+[2024-09-01 05:54:35Z INFO HostContext] Well known config file 'RSACredentials': '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/.credentials_rsaparams'
+[2024-09-01 05:54:35Z INFO RSAFileKeyManager] Loading RSA key parameters from file /home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/.credentials_rsaparams
+[2024-09-01 05:54:35Z INFO MessageListener] Attempt to create session.
+[2024-09-01 05:54:35Z INFO MessageListener] Connecting to the Runner Server...
+[2024-09-01 05:54:35Z INFO RunnerServer] EstablishVssConnection
+[2024-09-01 05:54:35Z INFO RunnerServer] Establish connection with 100 seconds timeout.
+[2024-09-01 05:54:35Z INFO GitHubActionsService] Starting operation Location.GetConnectionData
+[2024-09-01 05:54:35Z INFO RunnerServer] EstablishVssConnection
+[2024-09-01 05:54:35Z INFO RunnerServer] Establish connection with 60 seconds timeout.
+[2024-09-01 05:54:35Z INFO GitHubActionsService] Starting operation Location.GetConnectionData
+[2024-09-01 05:54:35Z INFO RunnerServer] EstablishVssConnection
+[2024-09-01 05:54:35Z INFO RunnerServer] Establish connection with 60 seconds timeout.
+[2024-09-01 05:54:35Z INFO GitHubActionsService] Starting operation Location.GetConnectionData
+[2024-09-01 05:54:36Z INFO GitHubActionsService] Finished operation Location.GetConnectionData
+[2024-09-01 05:54:36Z INFO GitHubActionsService] Finished operation Location.GetConnectionData
+[2024-09-01 05:54:36Z INFO GitHubActionsService] Finished operation Location.GetConnectionData
+[2024-09-01 05:54:36Z INFO MessageListener] VssConnection created
+[2024-09-01 05:54:36Z INFO Terminal] WRITE LINE: 
+[2024-09-01 05:54:36Z INFO Terminal] WRITE LINE: 
+[2024-09-01 05:54:36Z INFO RSAFileKeyManager] Loading RSA key parameters from file /home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/.credentials_rsaparams
+[2024-09-01 05:54:36Z INFO RSAFileKeyManager] Loading RSA key parameters from file /home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/.credentials_rsaparams
+[2024-09-01 05:54:37Z INFO GitHubActionsService] AAD Correlation ID for this token request: Unknown
+[2024-09-01 05:54:37Z INFO MessageListener] Session created.
+[2024-09-01 05:54:37Z INFO Terminal] WRITE LINE: Current runner version: '2.319.1'
+[2024-09-01 05:54:37Z INFO Terminal] WRITE LINE: 2024-09-01 05:54:37Z: Listening for Jobs
+[2024-09-01 05:54:37Z INFO JobDispatcher] Set runner/worker IPC timeout to 30 seconds.
+[2024-09-01 05:54:37Z INFO MessageListener] BrokerMigration message received. Polling Broker for messages...
+[2024-09-01 05:54:37Z INFO RSAFileKeyManager] Loading RSA key parameters from file /home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/.credentials_rsaparams
+[2024-09-01 05:54:37Z INFO GitHubActionsService] AAD Correlation ID for this token request: Unknown
+[2024-09-01 05:54:47Z INFO MessageListener] Message '1089482971899080792' received from session '2a82736d-5809-45f2-94d3-a87dfc7b7e5c'.
+[2024-09-01 05:54:47Z INFO ConfigurationStore] HasCredentials()
+[2024-09-01 05:54:47Z INFO ConfigurationStore] stored True
+[2024-09-01 05:54:47Z INFO CredentialManager] GetCredentialProvider
+[2024-09-01 05:54:47Z INFO CredentialManager] Creating type OAuth
+[2024-09-01 05:54:47Z INFO CredentialManager] Creating credential type: OAuth
+[2024-09-01 05:54:47Z INFO RSAFileKeyManager] Loading RSA key parameters from file /home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/.credentials_rsaparams
+[2024-09-01 05:54:47Z INFO ActionsRunServer] EstablishVssConnection
+[2024-09-01 05:54:47Z INFO ActionsRunServer] Establish connection with 100 seconds timeout.
+[2024-09-01 05:54:47Z INFO GitHubActionsService] Starting operation Location.GetConnectionData
+[2024-09-01 05:54:47Z INFO GitHubActionsService] Finished operation Location.GetConnectionData
+[2024-09-01 05:54:47Z INFO RSAFileKeyManager] Loading RSA key parameters from file /home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/.credentials_rsaparams
+[2024-09-01 05:54:47Z INFO RSAFileKeyManager] Loading RSA key parameters from file /home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/.credentials_rsaparams
+[2024-09-01 05:54:47Z INFO GitHubActionsService] AAD Correlation ID for this token request: Unknown
+[2024-09-01 05:54:48Z INFO JobDispatcher] Job request 9 for plan ea8938ef-03df-4d6e-972e-1fb064223891 job a047640a-23da-5e9b-1ef8-917a09b3753a received.
+[2024-09-01 05:54:48Z INFO JobDispatcher] Pull OrchestrationId ea8938ef-03df-4d6e-972e-1fb064223891.full-test.__default from JWT claims
+[2024-09-01 05:54:48Z INFO MessageListener] Received job status event. JobState: Busy
+[2024-09-01 05:54:48Z INFO MessageListener] _getMessagesTokenSource is already disposed.
+[2024-09-01 05:54:48Z INFO Terminal] WRITE LINE: 2024-09-01 05:54:48Z: Running job: full-test
+[2024-09-01 05:54:48Z INFO JobDispatcher] Start renew job request 9 for job a047640a-23da-5e9b-1ef8-917a09b3753a.
+[2024-09-01 05:54:48Z INFO JobDispatcher] Successfully renew job request 9, job is valid till 1/9/2024 6:05:48 am
+[2024-09-01 05:54:48Z INFO HostContext] Well known directory 'Bin': '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/bin'
+[2024-09-01 05:54:48Z INFO ProcessInvokerWrapper] Starting process:
+[2024-09-01 05:54:48Z INFO ProcessInvokerWrapper]   File name: '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/bin/Runner.Worker'
+[2024-09-01 05:54:48Z INFO ProcessInvokerWrapper]   Arguments: 'spawnclient 109 112'
+[2024-09-01 05:54:48Z INFO ProcessInvokerWrapper]   Working directory: '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/bin'
+[2024-09-01 05:54:48Z INFO ProcessInvokerWrapper]   Require exit code zero: 'False'
+[2024-09-01 05:54:48Z INFO ProcessInvokerWrapper]   Encoding web name:  ; code page: ''
+[2024-09-01 05:54:48Z INFO ProcessInvokerWrapper]   Force kill process on cancellation: 'True'
+[2024-09-01 05:54:48Z INFO ProcessInvokerWrapper]   Redirected STDIN: 'False'
+[2024-09-01 05:54:48Z INFO ProcessInvokerWrapper]   Persist current code page: 'False'
+[2024-09-01 05:54:48Z INFO ProcessInvokerWrapper]   Keep redirected STDIN open: 'False'
+[2024-09-01 05:54:48Z INFO ProcessInvokerWrapper]   High priority process: 'True'
+[2024-09-01 05:54:48Z INFO ProcessInvokerWrapper] Process started with process id 4752, waiting for process exit.
+[2024-09-01 05:54:48Z INFO JobDispatcher] Send job request message to worker for job a047640a-23da-5e9b-1ef8-917a09b3753a.
+[2024-09-01 05:54:48Z INFO ProcessChannel] Sending message of length 39981, with hash '818784c1eb1720406fe1d4cc99d6cee8ae62146a73a90d3753c8cc650ce19674'
+[2024-09-01 05:54:48Z INFO JobNotification] Entering JobStarted Notification
+[2024-09-01 05:54:48Z INFO JobNotification] Entering StartMonitor
+[2024-09-01 05:54:49Z INFO MessageListener] BrokerMigration message received. Polling Broker for messages...
+[2024-09-01 05:55:39Z INFO MessageListener] BrokerMigration message received. Polling Broker for messages...
+[2024-09-01 05:55:48Z INFO JobDispatcher] Successfully renew job request 9, job is valid till 1/9/2024 6:06:48 am
+[2024-09-01 05:56:19Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2024-09-01 05:56:19Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2024-09-01 05:56:19Z INFO ProcessInvokerWrapper] Finished process 4752 with exit code 100, and elapsed time 00:01:31.4157900.
+[2024-09-01 05:56:19Z INFO JobDispatcher] Worker finished for job a047640a-23da-5e9b-1ef8-917a09b3753a. Code: 100
+[2024-09-01 05:56:19Z INFO JobDispatcher] finish job request for job a047640a-23da-5e9b-1ef8-917a09b3753a with result: Succeeded
+[2024-09-01 05:56:19Z INFO Terminal] WRITE LINE: 2024-09-01 05:56:19Z: Job full-test completed with result: Succeeded
+[2024-09-01 05:56:19Z INFO JobDispatcher] Stop renew job request for job a047640a-23da-5e9b-1ef8-917a09b3753a.
+[2024-09-01 05:56:19Z INFO JobDispatcher] job renew has been cancelled, stop renew job request 9.
+[2024-09-01 05:56:19Z INFO JobNotification] Entering JobCompleted Notification
+[2024-09-01 05:56:19Z INFO JobNotification] Entering EndMonitor
+[2024-09-01 05:56:19Z INFO MessageListener] Received job status event. JobState: Online
+[2024-09-01 05:56:20Z INFO MessageListener] Message '1162313115761528879' received from session '2a82736d-5809-45f2-94d3-a87dfc7b7e5c'.
+[2024-09-01 05:56:20Z INFO ConfigurationStore] HasCredentials()
+[2024-09-01 05:56:20Z INFO ConfigurationStore] stored True
+[2024-09-01 05:56:20Z INFO CredentialManager] GetCredentialProvider
+[2024-09-01 05:56:20Z INFO CredentialManager] Creating type OAuth
+[2024-09-01 05:56:20Z INFO CredentialManager] Creating credential type: OAuth
+[2024-09-01 05:56:20Z INFO RSAFileKeyManager] Loading RSA key parameters from file /home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/.credentials_rsaparams
+[2024-09-01 05:56:20Z INFO ActionsRunServer] EstablishVssConnection
+[2024-09-01 05:56:20Z INFO ActionsRunServer] Establish connection with 100 seconds timeout.
+[2024-09-01 05:56:20Z INFO GitHubActionsService] Starting operation Location.GetConnectionData
+[2024-09-01 05:56:20Z INFO GitHubActionsService] Finished operation Location.GetConnectionData
+[2024-09-01 05:56:20Z INFO RSAFileKeyManager] Loading RSA key parameters from file /home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/.credentials_rsaparams
+[2024-09-01 05:56:20Z INFO RSAFileKeyManager] Loading RSA key parameters from file /home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/.credentials_rsaparams
+[2024-09-01 05:56:21Z INFO GitHubActionsService] AAD Correlation ID for this token request: Unknown
+[2024-09-01 05:56:21Z INFO JobDispatcher] Job request 10 for plan ea8938ef-03df-4d6e-972e-1fb064223891 job 0e10f8dd-85b5-5bee-19c6-47fc7db6f171 received.
+[2024-09-01 05:56:21Z INFO JobDispatcher] Pull OrchestrationId ea8938ef-03df-4d6e-972e-1fb064223891.unit-test.__default from JWT claims
+[2024-09-01 05:56:21Z INFO MessageListener] Received job status event. JobState: Busy
+[2024-09-01 05:56:21Z INFO MessageListener] _getMessagesTokenSource is already disposed.
+[2024-09-01 05:56:21Z INFO JobDispatcher] Job request a047640a-23da-5e9b-1ef8-917a09b3753a processed succeed.
+[2024-09-01 05:56:21Z INFO Terminal] WRITE LINE: 2024-09-01 05:56:21Z: Running job: unit-test
+[2024-09-01 05:56:21Z INFO JobDispatcher] Start renew job request 10 for job 0e10f8dd-85b5-5bee-19c6-47fc7db6f171.
+[2024-09-01 05:56:21Z INFO JobDispatcher] Successfully renew job request 10, job is valid till 1/9/2024 6:07:21 am
+[2024-09-01 05:56:21Z INFO HostContext] Well known directory 'Bin': '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/bin'
+[2024-09-01 05:56:21Z INFO ProcessInvokerWrapper] Starting process:
+[2024-09-01 05:56:21Z INFO ProcessInvokerWrapper]   File name: '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/bin/Runner.Worker'
+[2024-09-01 05:56:21Z INFO ProcessInvokerWrapper]   Arguments: 'spawnclient 103 111'
+[2024-09-01 05:56:21Z INFO ProcessInvokerWrapper]   Working directory: '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/bin'
+[2024-09-01 05:56:21Z INFO ProcessInvokerWrapper]   Require exit code zero: 'False'
+[2024-09-01 05:56:21Z INFO ProcessInvokerWrapper]   Encoding web name:  ; code page: ''
+[2024-09-01 05:56:21Z INFO ProcessInvokerWrapper]   Force kill process on cancellation: 'True'
+[2024-09-01 05:56:21Z INFO ProcessInvokerWrapper]   Redirected STDIN: 'False'
+[2024-09-01 05:56:21Z INFO ProcessInvokerWrapper]   Persist current code page: 'False'
+[2024-09-01 05:56:21Z INFO ProcessInvokerWrapper]   Keep redirected STDIN open: 'False'
+[2024-09-01 05:56:21Z INFO ProcessInvokerWrapper]   High priority process: 'True'
+[2024-09-01 05:56:21Z INFO ProcessInvokerWrapper] Process started with process id 5910, waiting for process exit.
+[2024-09-01 05:56:21Z INFO JobDispatcher] Send job request message to worker for job 0e10f8dd-85b5-5bee-19c6-47fc7db6f171.
+[2024-09-01 05:56:21Z INFO ProcessChannel] Sending message of length 39980, with hash '6caab466b9f86b77c2f5bb0b5df4ce1f9559ca274ba2e6e70bb9eb17ae8121fa'
+[2024-09-01 05:56:21Z INFO JobNotification] Entering JobStarted Notification
+[2024-09-01 05:56:21Z INFO JobNotification] Entering StartMonitor
+[2024-09-01 05:56:22Z INFO MessageListener] BrokerMigration message received. Polling Broker for messages...
+[2024-09-01 05:56:31Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2024-09-01 05:56:31Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2024-09-01 05:56:31Z INFO ProcessInvokerWrapper] Finished process 5910 with exit code 100, and elapsed time 00:00:09.8132158.
+[2024-09-01 05:56:31Z INFO JobDispatcher] Worker finished for job 0e10f8dd-85b5-5bee-19c6-47fc7db6f171. Code: 100
+[2024-09-01 05:56:31Z INFO JobDispatcher] finish job request for job 0e10f8dd-85b5-5bee-19c6-47fc7db6f171 with result: Succeeded
+[2024-09-01 05:56:31Z INFO Terminal] WRITE LINE: 2024-09-01 05:56:31Z: Job unit-test completed with result: Succeeded
+[2024-09-01 05:56:31Z INFO JobDispatcher] Stop renew job request for job 0e10f8dd-85b5-5bee-19c6-47fc7db6f171.
+[2024-09-01 05:56:31Z INFO JobDispatcher] job renew has been cancelled, stop renew job request 10.
+[2024-09-01 05:56:31Z INFO JobNotification] Entering JobCompleted Notification
+[2024-09-01 05:56:31Z INFO JobNotification] Entering EndMonitor
+[2024-09-01 05:56:31Z INFO MessageListener] Received job status event. JobState: Online
+[2024-09-01 05:57:12Z INFO MessageListener] BrokerMigration message received. Polling Broker for messages...
+[2024-09-01 05:58:03Z INFO MessageListener] BrokerMigration message received. Polling Broker for messages...
+[2024-09-01 05:58:53Z INFO MessageListener] BrokerMigration message received. Polling Broker for messages...
+[2024-09-01 05:59:10Z INFO MessageListener] Message '6548378119930393754' received from session '2a82736d-5809-45f2-94d3-a87dfc7b7e5c'.
+[2024-09-01 05:59:10Z INFO ConfigurationStore] HasCredentials()
+[2024-09-01 05:59:10Z INFO ConfigurationStore] stored True
+[2024-09-01 05:59:10Z INFO CredentialManager] GetCredentialProvider
+[2024-09-01 05:59:10Z INFO CredentialManager] Creating type OAuth
+[2024-09-01 05:59:10Z INFO CredentialManager] Creating credential type: OAuth
+[2024-09-01 05:59:10Z INFO RSAFileKeyManager] Loading RSA key parameters from file /home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/.credentials_rsaparams
+[2024-09-01 05:59:10Z INFO ActionsRunServer] EstablishVssConnection
+[2024-09-01 05:59:10Z INFO ActionsRunServer] Establish connection with 100 seconds timeout.
+[2024-09-01 05:59:10Z INFO GitHubActionsService] Starting operation Location.GetConnectionData
+[2024-09-01 05:59:10Z INFO GitHubActionsService] Finished operation Location.GetConnectionData
+[2024-09-01 05:59:10Z INFO RSAFileKeyManager] Loading RSA key parameters from file /home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/.credentials_rsaparams
+[2024-09-01 05:59:10Z INFO RSAFileKeyManager] Loading RSA key parameters from file /home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/.credentials_rsaparams
+[2024-09-01 05:59:10Z INFO GitHubActionsService] AAD Correlation ID for this token request: Unknown
+[2024-09-01 05:59:11Z INFO JobDispatcher] Job request 11 for plan 347c5bff-f4ce-4e2f-b73a-aa947804b415 job 0e10f8dd-85b5-5bee-19c6-47fc7db6f171 received.
+[2024-09-01 05:59:11Z INFO JobDispatcher] Pull OrchestrationId 347c5bff-f4ce-4e2f-b73a-aa947804b415.unit-test.__default from JWT claims
+[2024-09-01 05:59:11Z INFO MessageListener] Received job status event. JobState: Busy
+[2024-09-01 05:59:11Z INFO MessageListener] _getMessagesTokenSource is already disposed.
+[2024-09-01 05:59:11Z INFO JobDispatcher] Job request 0e10f8dd-85b5-5bee-19c6-47fc7db6f171 processed succeed.
+[2024-09-01 05:59:11Z INFO Terminal] WRITE LINE: 2024-09-01 05:59:11Z: Running job: unit-test
+[2024-09-01 05:59:11Z INFO JobDispatcher] Start renew job request 11 for job 0e10f8dd-85b5-5bee-19c6-47fc7db6f171.
+[2024-09-01 05:59:11Z INFO JobDispatcher] Successfully renew job request 11, job is valid till 1/9/2024 6:10:11 am
+[2024-09-01 05:59:11Z INFO HostContext] Well known directory 'Bin': '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/bin'
+[2024-09-01 05:59:11Z INFO ProcessInvokerWrapper] Starting process:
+[2024-09-01 05:59:11Z INFO ProcessInvokerWrapper]   File name: '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/bin/Runner.Worker'
+[2024-09-01 05:59:11Z INFO ProcessInvokerWrapper]   Arguments: 'spawnclient 103 111'
+[2024-09-01 05:59:11Z INFO ProcessInvokerWrapper]   Working directory: '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/bin'
+[2024-09-01 05:59:11Z INFO ProcessInvokerWrapper]   Require exit code zero: 'False'
+[2024-09-01 05:59:11Z INFO ProcessInvokerWrapper]   Encoding web name:  ; code page: ''
+[2024-09-01 05:59:11Z INFO ProcessInvokerWrapper]   Force kill process on cancellation: 'True'
+[2024-09-01 05:59:11Z INFO ProcessInvokerWrapper]   Redirected STDIN: 'False'
+[2024-09-01 05:59:11Z INFO ProcessInvokerWrapper]   Persist current code page: 'False'
+[2024-09-01 05:59:11Z INFO ProcessInvokerWrapper]   Keep redirected STDIN open: 'False'
+[2024-09-01 05:59:11Z INFO ProcessInvokerWrapper]   High priority process: 'True'
+[2024-09-01 05:59:11Z INFO ProcessInvokerWrapper] Process started with process id 6918, waiting for process exit.
+[2024-09-01 05:59:11Z INFO JobDispatcher] Send job request message to worker for job 0e10f8dd-85b5-5bee-19c6-47fc7db6f171.
+[2024-09-01 05:59:11Z INFO ProcessChannel] Sending message of length 26301, with hash '16640ca97e1fe7203ec93cf760f95c1b85f18247730da17921eac53ac64f9d51'
+[2024-09-01 05:59:11Z INFO JobNotification] Entering JobStarted Notification
+[2024-09-01 05:59:11Z INFO JobNotification] Entering StartMonitor
+[2024-09-01 05:59:12Z INFO MessageListener] BrokerMigration message received. Polling Broker for messages...
+[2024-09-01 05:59:20Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2024-09-01 05:59:20Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2024-09-01 05:59:20Z INFO ProcessInvokerWrapper] Finished process 6918 with exit code 100, and elapsed time 00:00:09.3246846.
+[2024-09-01 05:59:20Z INFO JobDispatcher] Worker finished for job 0e10f8dd-85b5-5bee-19c6-47fc7db6f171. Code: 100
+[2024-09-01 05:59:20Z INFO JobDispatcher] finish job request for job 0e10f8dd-85b5-5bee-19c6-47fc7db6f171 with result: Succeeded
+[2024-09-01 05:59:20Z INFO Terminal] WRITE LINE: 2024-09-01 05:59:20Z: Job unit-test completed with result: Succeeded
+[2024-09-01 05:59:20Z INFO JobDispatcher] Stop renew job request for job 0e10f8dd-85b5-5bee-19c6-47fc7db6f171.
+[2024-09-01 05:59:20Z INFO JobDispatcher] job renew has been cancelled, stop renew job request 11.
+[2024-09-01 05:59:20Z INFO JobNotification] Entering JobCompleted Notification
+[2024-09-01 05:59:20Z INFO JobNotification] Entering EndMonitor
+[2024-09-01 05:59:20Z INFO MessageListener] Received job status event. JobState: Online
+[2024-09-01 05:59:21Z INFO MessageListener] Message '3748344586168217455' received from session '2a82736d-5809-45f2-94d3-a87dfc7b7e5c'.
+[2024-09-01 05:59:21Z INFO ConfigurationStore] HasCredentials()
+[2024-09-01 05:59:21Z INFO ConfigurationStore] stored True
+[2024-09-01 05:59:21Z INFO CredentialManager] GetCredentialProvider
+[2024-09-01 05:59:21Z INFO CredentialManager] Creating type OAuth
+[2024-09-01 05:59:21Z INFO CredentialManager] Creating credential type: OAuth
+[2024-09-01 05:59:21Z INFO RSAFileKeyManager] Loading RSA key parameters from file /home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/.credentials_rsaparams
+[2024-09-01 05:59:21Z INFO ActionsRunServer] EstablishVssConnection
+[2024-09-01 05:59:21Z INFO ActionsRunServer] Establish connection with 100 seconds timeout.
+[2024-09-01 05:59:21Z INFO GitHubActionsService] Starting operation Location.GetConnectionData
+[2024-09-01 05:59:21Z INFO GitHubActionsService] Finished operation Location.GetConnectionData
+[2024-09-01 05:59:21Z INFO RSAFileKeyManager] Loading RSA key parameters from file /home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/.credentials_rsaparams
+[2024-09-01 05:59:21Z INFO RSAFileKeyManager] Loading RSA key parameters from file /home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/.credentials_rsaparams
+[2024-09-01 05:59:21Z INFO GitHubActionsService] AAD Correlation ID for this token request: Unknown
+[2024-09-01 05:59:22Z INFO JobDispatcher] Job request 12 for plan 347c5bff-f4ce-4e2f-b73a-aa947804b415 job a047640a-23da-5e9b-1ef8-917a09b3753a received.
+[2024-09-01 05:59:22Z INFO JobDispatcher] Pull OrchestrationId 347c5bff-f4ce-4e2f-b73a-aa947804b415.full-test.__default from JWT claims
+[2024-09-01 05:59:22Z INFO MessageListener] Received job status event. JobState: Busy
+[2024-09-01 05:59:22Z INFO MessageListener] _getMessagesTokenSource is already disposed.
+[2024-09-01 05:59:22Z INFO JobDispatcher] Job request 0e10f8dd-85b5-5bee-19c6-47fc7db6f171 processed succeed.
+[2024-09-01 05:59:22Z INFO Terminal] WRITE LINE: 2024-09-01 05:59:22Z: Running job: full-test
+[2024-09-01 05:59:22Z INFO JobDispatcher] Start renew job request 12 for job a047640a-23da-5e9b-1ef8-917a09b3753a.
+[2024-09-01 05:59:22Z INFO JobDispatcher] Successfully renew job request 12, job is valid till 1/9/2024 6:10:21 am
+[2024-09-01 05:59:22Z INFO HostContext] Well known directory 'Bin': '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/bin'
+[2024-09-01 05:59:22Z INFO ProcessInvokerWrapper] Starting process:
+[2024-09-01 05:59:22Z INFO ProcessInvokerWrapper]   File name: '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/bin/Runner.Worker'
+[2024-09-01 05:59:22Z INFO ProcessInvokerWrapper]   Arguments: 'spawnclient 109 112'
+[2024-09-01 05:59:22Z INFO ProcessInvokerWrapper]   Working directory: '/home/spinoandraptos/Documents/assignment-1-spinoandraptos/actions-runner/bin'
+[2024-09-01 05:59:22Z INFO ProcessInvokerWrapper]   Require exit code zero: 'False'
+[2024-09-01 05:59:22Z INFO ProcessInvokerWrapper]   Encoding web name:  ; code page: ''
+[2024-09-01 05:59:22Z INFO ProcessInvokerWrapper]   Force kill process on cancellation: 'True'
+[2024-09-01 05:59:22Z INFO ProcessInvokerWrapper]   Redirected STDIN: 'False'
+[2024-09-01 05:59:22Z INFO ProcessInvokerWrapper]   Persist current code page: 'False'
+[2024-09-01 05:59:22Z INFO ProcessInvokerWrapper]   Keep redirected STDIN open: 'False'
+[2024-09-01 05:59:22Z INFO ProcessInvokerWrapper]   High priority process: 'True'
+[2024-09-01 05:59:22Z INFO ProcessInvokerWrapper] Process started with process id 7893, waiting for process exit.
+[2024-09-01 05:59:22Z INFO JobDispatcher] Send job request message to worker for job a047640a-23da-5e9b-1ef8-917a09b3753a.
+[2024-09-01 05:59:22Z INFO ProcessChannel] Sending message of length 26303, with hash 'b2ce546c286c189ee4a3e535f37ecf711dab0aae274d8cd0820442ce6097abda'
+[2024-09-01 05:59:22Z INFO JobNotification] Entering JobStarted Notification
+[2024-09-01 05:59:22Z INFO JobNotification] Entering StartMonitor
+[2024-09-01 05:59:23Z INFO MessageListener] BrokerMigration message received. Polling Broker for messages...
+[2024-09-01 05:59:31Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2024-09-01 05:59:31Z INFO ProcessInvokerWrapper] STDOUT/STDERR stream read finished.
+[2024-09-01 05:59:31Z INFO ProcessInvokerWrapper] Finished process 7893 with exit code 100, and elapsed time 00:00:09.5642527.
+[2024-09-01 05:59:31Z INFO JobDispatcher] Worker finished for job a047640a-23da-5e9b-1ef8-917a09b3753a. Code: 100
+[2024-09-01 05:59:31Z INFO JobDispatcher] finish job request for job a047640a-23da-5e9b-1ef8-917a09b3753a with result: Succeeded
+[2024-09-01 05:59:31Z INFO Terminal] WRITE LINE: 2024-09-01 05:59:31Z: Job full-test completed with result: Succeeded
+[2024-09-01 05:59:31Z INFO JobDispatcher] Stop renew job request for job a047640a-23da-5e9b-1ef8-917a09b3753a.
+[2024-09-01 05:59:31Z INFO JobDispatcher] job renew has been cancelled, stop renew job request 12.
+[2024-09-01 05:59:31Z INFO JobNotification] Entering JobCompleted Notification
+[2024-09-01 05:59:31Z INFO JobNotification] Entering EndMonitor
+[2024-09-01 05:59:31Z INFO MessageListener] Received job status event. JobState: Online
+[2024-09-01 06:00:13Z INFO MessageListener] BrokerMigration message received. Polling Broker for messages...
+[2024-09-01 06:01:04Z INFO MessageListener] BrokerMigration message received. Polling Broker for messages...
+[2024-09-01 06:01:54Z INFO MessageListener] BrokerMigration message received. Polling Broker for messages...
+[2024-09-01 06:02:45Z INFO MessageListener] BrokerMigration message received. Polling Broker for messages...
+[2024-09-01 06:03:35Z INFO MessageListener] BrokerMigration message received. Polling Broker for messages...
+[2024-09-01 06:04:25Z INFO MessageListener] BrokerMigration message received. Polling Broker for messages...
