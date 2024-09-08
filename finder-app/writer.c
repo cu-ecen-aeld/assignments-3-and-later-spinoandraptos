@@ -67,7 +67,7 @@ int main(int argc, char **argv)
 		syslog(LOG_ERR, "Error: Incomplete write to %s, expected: %ld bytes but wrote: %d bytes", file_path, strlen(file_content), bytes_written);
 	}
 	
-	/* Stop logging */
+	/* Terminate logger connection */
 	closelog ();
 
 }
