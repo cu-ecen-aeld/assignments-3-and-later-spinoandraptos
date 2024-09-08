@@ -1,0 +1,12 @@
+﻿{
+  "repositoryName": "cu-ecen-aeld/assignment-2-spinoandraptos",
+  "pipelineDirectory": "assignment-2-spinoandraptos",
+  "workspaceDirectory": "assignment-2-spinoandraptos/assignment-2-spinoandraptos",
+  "repositories": {
+    "cu-ecen-aeld/assignment-2-spinoandraptos": {
+      "repositoryPath": "assignment-2-spinoandraptos/assignment-2-spinoandraptos",
+      "lastRunOn": "09/06/2024 05:19:23 +08:00"
+    }
+  },
+  "lastRunOn": "09/06/2024 05:19:56 +08:00"
+}
