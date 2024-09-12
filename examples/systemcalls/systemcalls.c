@@ -1,4 +1,14 @@
 #include "systemcalls.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <errno.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 /**
  * @param cmd the command to execute with system()
@@ -10,14 +20,22 @@
 bool do_system(const char *cmd)
 {
 
-/*
- * TODO  add your code here
- *  Call the system() function with the command set in the cmd
- *   and return a boolean true if the system() call completed with success
- *   or false() if it returned a failure
-*/
-
-    return true;
+	/*
+	*  Call the system() function with the command set in the cmd
+	*  and return a boolean true if the system() call completed with success
+	*  or false() if it returned a failure
+	*/  
+	int status = system(cmd);
+	
+	/* 
+	* Successful system() call returns the termination status of cmd executed in child shell, which should be 0 if successful
+	* 0 can also be returned when command is NULL, so a check is needed for that
+	*/
+	if (status==0 && cmd!=NULL) {
+		printf("ERROR: Unsuccessful system call\n\n");
+		return true;
+	}
+	return false;
 }
 
 /**
@@ -36,32 +54,68 @@ bool do_system(const char *cmd)
 
 bool do_exec(int count, ...)
 {
-    va_list args;
-    va_start(args, count);
-    char * command[count+1];
-    int i;
-    for(i=0; i<count; i++)
-    {
-        command[i] = va_arg(args, char *);
-    }
-    command[count] = NULL;
-    // this line is to avoid a compile warning before your implementation is complete
-    // and may be removed
-    command[count] = command[count];
-
-/*
- * TODO:
- *   Execute a system command by calling fork, execv(),
- *   and wait instead of system (see LSP page 161).
- *   Use the command[0] as the full path to the command to execute
- *   (first argument to execv), and use the remaining arguments
- *   as second argument to the execv() command.
- *
-*/
-
-    va_end(args);
-
-    return true;
+	va_list args;
+	va_start(args, count);
+	char * command[count+1];
+	int i;
+	for(i=0; i<count; i++)
+	{
+	command[i] = va_arg(args, char *);
+	}
+	command[count] = NULL;
+	
+	/* Avoid duplicate printf */
+	fflush(stdout);
+	
+  	/* Create a new process by forking to execute referenced command */
+  	pid_t command_pid = fork();
+  	
+	/* Check for forking error */
+	if(command_pid == -1) {
+		printf("ERROR: Unsuccessful process forking\n\n");
+		return false;
+	}
+	
+  	/* Now in child process, check for successsful fork with status 0 */
+	else if (command_pid == 0) {
+		char *command_path = command[0];
+		
+		/* Execute command from path with arguments starting from second element of command */
+		execv(command_path, command);
+	
+		/* If program got here, execv returned meaning error occurred */
+		printf("ERROR: execv returned without successful command execution\n\n");
+		return false;
+	}
+	else {
+		int command_status;
+		int wait_status = waitpid(command_pid, &command_status, 0);
+		
+		/* Check for waiting error */
+		if (wait_status == -1) {
+			printf("ERROR: unsuccessful wait for child process\n\n");
+			return false;
+		}
+		 if (WIFEXITED(command_status)) {
+	 		int command_code = WEXITSTATUS(command_status);
+			printf("Process exited, status=%d\n", command_code);
+			/* Check for executed command error */
+			if (command_code!=0) {
+				printf("ERROR: unsuccessful execution of command in child process\n\n");
+				return false;
+			}
+		} else if (WIFSIGNALED(command_status)) {
+			printf("Process killed by signal %d\n", WTERMSIG(command_status));
+		} else if (WIFSTOPPED(command_status)) {
+			printf("Process stopped by signal %d\n", WSTOPSIG(command_status));
+		} else if (WIFCONTINUED(command_status)) {
+			printf("Process continued\n");
+		}
+	}
+	
+	va_end(args);
+	printf("\n");
+	return true;
 }
 
 /**
@@ -71,29 +125,85 @@ bool do_exec(int count, ...)
 */
 bool do_exec_redirect(const char *outputfile, int count, ...)
 {
-    va_list args;
-    va_start(args, count);
-    char * command[count+1];
-    int i;
-    for(i=0; i<count; i++)
-    {
-        command[i] = va_arg(args, char *);
-    }
-    command[count] = NULL;
-    // this line is to avoid a compile warning before your implementation is complete
-    // and may be removed
-    command[count] = command[count];
-
-
-/*
- * TODO
- *   Call execv, but first using https://stackoverflow.com/a/13784315/1446624 as a refernce,
- *   redirect standard out to a file specified by outputfile.
- *   The rest of the behaviour is same as do_exec()
- *
-*/
-
-    va_end(args);
-
-    return true;
+	va_list args;
+	va_start(args, count);
+	char * command[count+1];
+	int i;
+	for(i=0; i<count; i++)
+	{
+	command[i] = va_arg(args, char *);
+	}
+	command[count] = NULL;
+	// this line is to avoid a compile warning before your implementation is complete
+	// and may be removed
+	command[count] = command[count];
+		
+	/* Avoid duplicate printf */
+	fflush(stdout);
+	
+  	/* Create a new process by forking to execute referenced command */
+  	pid_t command_pid = fork();
+	int fd = open(outputfile, O_RDWR | O_TRUNC | O_CREAT , S_IRWXU | S_IRWXG | S_IRWXO);
+	/* Check for file creation/opening error */
+	if (fd==-1) 
+	{
+		printf("Error: (%s) while opening %s\n\n", strerror(errno), outputfile);
+		return false;
+	}
+	/* Check for forking error */
+	if(command_pid == -1) {
+		printf("ERROR: Unsuccessful process forking\n\n");
+		return false;
+	}
+	
+  	/* Now in child process, check for successsful fork with status 0 */
+	else if (command_pid == 0) {
+		/* With reference from: https://stackoverflow.com/a/13784315/1446624*, redirect standard out (fd 1) to a file specified by outputfile */
+		/* Check for file descriptor redirecting error */
+		int redirect_status = dup2(fd, 1);
+		if (redirect_status < 0) 
+		{ 	
+			printf("Error: Redirecting outputfile: %s failed\n\n", outputfile);
+			return false;
+		}
+    		close(fd);
+		char *command_path = command[0];
+		
+		/* Execute command from path with arguments starting from second element of command */
+		execv(command_path, command);
+	
+		/* If program got here, execv returned meaning error occurred */
+		printf("ERROR: execv returned without successful command execution\n\n");
+		return false;
+	}
+	else {	
+		int command_status;
+		int wait_status = waitpid(command_pid, &command_status, 0);
+		
+		/* Check for waiting error */
+		if (wait_status == -1) {
+			printf("ERROR: unsuccessful wait for child process\n\n");
+			return false;
+		}
+		close(fd);
+		
+		if (WIFEXITED(command_status)) {
+	 		int command_code = WEXITSTATUS(command_status);
+			printf("Process exited, status=%d\n", command_code);
+			/* Check for executed command error */
+			if (command_code!=0) {
+				printf("ERROR: unsuccessful execution of command in child process\n\n");
+				return false;
+			}
+		} else if (WIFSIGNALED(command_status)) {
+			printf("Process killed by signal %d\n", WTERMSIG(command_status));
+		} else if (WIFSTOPPED(command_status)) {
+			printf("Process stopped by signal %d\n", WSTOPSIG(command_status));
+		} else if (WIFCONTINUED(command_status)) {
+			printf("Process continued\n");
+		}
+	}
+	va_end(args);
+	printf("\n");
+	return true;
 }
