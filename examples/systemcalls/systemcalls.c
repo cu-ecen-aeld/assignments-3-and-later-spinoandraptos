@@ -85,6 +85,7 @@ bool do_exec(int count, ...)
 	
 		/* If program got here, execv returned meaning error occurred */
 		printf("ERROR: execv returned without successful command execution\n\n");
+		exit(1);
 		return false;
 	}
 	else {
@@ -174,6 +175,7 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
 	
 		/* If program got here, execv returned meaning error occurred */
 		printf("ERROR: execv returned without successful command execution\n\n");
+		exit(1);
 		return false;
 	}
 	else {	
