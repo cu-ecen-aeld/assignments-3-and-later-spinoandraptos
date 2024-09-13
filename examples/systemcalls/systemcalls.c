@@ -85,9 +85,11 @@ bool do_exec(int count, ...)
 	
 		/* If program got here, execv returned meaning error occurred */
 		printf("ERROR: execv returned without successful command execution\n\n");
+		/* Error with process, terminate the process to avoid causing issues */
 		exit(1);
 		return false;
 	}
+	/* In parent process, waiting for the child process to complete command execution */
 	else {
 		int command_status;
 		int wait_status = waitpid(command_pid, &command_status, 0);
@@ -97,6 +99,7 @@ bool do_exec(int count, ...)
 			printf("ERROR: unsuccessful wait for child process\n\n");
 			return false;
 		}
+		/* Check wait result */
 		 if (WIFEXITED(command_status)) {
 	 		int command_code = WEXITSTATUS(command_status);
 			printf("Process exited, status=%d\n", command_code);
@@ -175,9 +178,11 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
 	
 		/* If program got here, execv returned meaning error occurred */
 		printf("ERROR: execv returned without successful command execution\n\n");
+		/* Error with process, terminate the process to avoid causing issues */
 		exit(1);
 		return false;
 	}
+	/* In parent process, waiting for the child process to complete command execution */
 	else {	
 		int command_status;
 		int wait_status = waitpid(command_pid, &command_status, 0);
@@ -188,7 +193,7 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
 			return false;
 		}
 		close(fd);
-		
+		/* Check wait result */
 		if (WIFEXITED(command_status)) {
 	 		int command_code = WEXITSTATUS(command_status);
 			printf("Process exited, status=%d\n", command_code);
