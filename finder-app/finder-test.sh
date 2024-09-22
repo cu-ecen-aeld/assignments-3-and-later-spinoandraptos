@@ -5,14 +5,10 @@
 set -e
 set -u
 
-# Change to the directory where this script is located
-# So all scripts and executables needed by finder-test.sh will be located
-cd `dirname $0`
-
 NUMFILES=10
 WRITESTR=AELD_IS_FUN
 WRITEDIR=/tmp/aeld-data
-username=$(cat conf/username.txt)
+username=$(cat /etc/finder-app/conf/username.txt)
 
 if [ $# -lt 3 ]
 then
@@ -36,7 +32,7 @@ echo "Writing ${NUMFILES} files containing string ${WRITESTR} to ${WRITEDIR}"
 rm -rf "${WRITEDIR}"
 
 # create $WRITEDIR if not assignment1
-assignment=`cat conf/assignment.txt`
+assignment= $(cat /etc/finder-app/conf/assignment.txt)
 
 if [ $assignment != 'assignment1' ]
 then
@@ -63,8 +59,7 @@ do
 	./writer "$WRITEDIR/${username}$i.txt" "$WRITESTR"
 done
 
-# Use of sh to execute successfully on target
-OUTPUTSTRING=$(sh finder.sh "$WRITEDIR" "$WRITESTR")
+OUTPUTSTRING=$(finder.sh "$WRITEDIR" "$WRITESTR")
 
 # Write output of the finder command to /tmp/assignment4-result.txt
 echo ${OUTPUTSTRING} > /tmp/assignment4-result.txt
