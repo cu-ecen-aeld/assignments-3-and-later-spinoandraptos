@@ -6,12 +6,12 @@ CFLAGS ?= -Wall -Werror -g
 
 TARGET ?= aesdsocket
 
-LDFLAGS ?= -lpthread -lrt
+LDFLAGS ?= -pthread -lrt
 
-all: $(TARGET)
+OBJS ?= aesdsocket.c 
 
-$(TARGET): $(TARGET).c
-	$(CC) $(CFLAGS) $^ -o $@ $(INCLUDES) $(LDFLAGS)
+all: 
+	${CC} $(CFLAGS) $(INCLUDES) $(OBJS) -o $(TARGET) $(LDFLAGS)
 	
 # Use of phony to let makefile know clean target not associated with a file named "clean"
 .PHONY : clean
@@ -19,3 +19,6 @@ $(TARGET): $(TARGET).c
 # Clean target with forced removal of all .o files (*.o) and executables (*.elf)
 clean:
 	rm -f  *.o *.elf $(TARGET)
+	
+	
+
