@@ -29,10 +29,17 @@
 struct aesd_buffer_entry *aesd_circular_buffer_find_entry_offset_for_fpos(struct aesd_circular_buffer *buffer,
             size_t char_offset, size_t *entry_offset_byte_rtn )
 {
-    /* Init offset to current in_offs */
-    uint8_t offset = buffer->in_offs;
+    uint8_t offset = 0;
+    if (buffer->full){
+        /* Oldest entry is at in */
+	offset = buffer->in_offs;
+	
+    } else {
+	/* Oldest entry is at out */
+	offset = buffer->out_offs;
+    }
     
-    /* Keep moving down through the entire buffer until combined entry size is less than char_offset */
+    /* Keep moving down through the entire buffer until combined string length size is more than char_offset */
     for (int i = 0; i < AESDCHAR_MAX_WRITE_OPERATIONS_SUPPORTED; i++)
     {
         if (char_offset < buffer->entry[offset].size)
