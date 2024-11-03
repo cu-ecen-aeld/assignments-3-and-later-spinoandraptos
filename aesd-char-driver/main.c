@@ -47,7 +47,7 @@ int aesd_release(struct inode *inode, struct file *filp)
     	return 0;
 }
 
-/* Reads count of data from kernel space into user space buf */
+/* Reads count of data from kernel space driver file into user space buf */
 ssize_t aesd_read(struct file *filp, char __user *buf, size_t count,
                 loff_t *f_pos)
 {
@@ -113,6 +113,7 @@ ssize_t aesd_read(struct file *filp, char __user *buf, size_t count,
 	return retval;
 }
 
+/* Writes count of data from user space buf into kernel space driver file */
 ssize_t aesd_write(struct file *filp, const char __user *buf, size_t count,
                 loff_t *f_pos)
 {
@@ -208,6 +209,98 @@ ssize_t aesd_write(struct file *filp, const char __user *buf, size_t count,
 	return newline_pos;
 }
 
+long aesd_ioctl(struct file *filp, unsigned int cmd, unsigned long arg){
+
+	// Get device
+	struct aesd_dev *dev = filp->private_data;
+	if (dev == NULL) {
+		PDEBUG("Device cannot be accessed");
+		return -EINVAL;
+	}
+	
+	if (cmd == AESDCHAR_IOCSEEKTO){
+		
+		// Try to lock the device mutex
+		int res = mutex_lock_interruptible(&dev->mutex);
+		if (res != 0){
+			PDEBUG("Unable to lock device mutex");
+			return -ERESTARTSYS;
+		}		
+		
+		// Define type of seek performed on the aesdchar driver
+		struct aesd_seekto seek_details;
+		
+		//Copy user arg into seekto struct
+		unsigned long bytes_not_copied = copy_from_user(&seek_details, (const void __user *)arg, sizeof(seek_details));
+		
+		if (bytes_not_copied != 0) {
+			PDEBUG("Unable to copy arg from user space");
+			return -EFAULT;
+		}
+		
+		// If write cmd out of range of the number of write commands, error
+		if (seek_details.write_cmd >= AESDCHAR_MAX_WRITE_OPERATIONS_SUPPORTED) {
+			PDEBUG("Out of range write command");
+			mutex_unlock(&dev->mutex);
+			return -EINVAL; 
+		}
+		// If write cmd offset out of range of the command length, error
+		else if (seek_details.write_cmd_offset >= dev->buffer.entry[seek_details.write_cmd].size) {
+			PDEBUG("Out of range write offset");
+			mutex_unlock(&dev->mutex);
+			return -EINVAL;
+		}
+		
+		// Seek to start of command and add the offset within the command
+		loff_t new_offset = 0;
+		for (int i = 0; i < seek_details.write_cmd; i++) {
+			new_offset += dev->buffer.entry[i].size;
+		}
+		new_offset += seek_details.write_cmd_offset;
+		
+		// Update file position pointer to new offset
+		filp->f_pos = new_offset;
+		return 0;
+	}
+	else {
+		return -ENOTTY;
+	}
+}
+
+loff_t aesd_llseek(struct file *filp, loff_t offset, int whence){
+
+	// Get device
+	struct aesd_dev *dev = filp->private_data;
+	if (dev == NULL) {
+		PDEBUG("Device cannot be accessed");
+		return -EINVAL;
+	}
+	
+	// Try to lock the device mutex
+	int res = mutex_lock_interruptible(&dev->mutex);
+	if (res != 0){
+		PDEBUG("Unable to lock device mutex");
+		return -ERESTARTSYS;
+	}	
+	
+	// Total size of all entries in the buffer
+	loff_t total_size = 0;
+     	struct aesd_buffer_entry *entry;
+	uint8_t index = 0;
+     	AESD_CIRCULAR_BUFFER_FOREACH(entry, &dev->buffer, index){
+	    	if (entry->buffptr){
+	    		total_size += entry->size;
+	    	}
+	}
+	
+	// Reposition offset for fixed-sized device 
+	loff_t fixed_size_offset = fixed_size_llseek(filp, offset, whence, total_size);
+	
+	mutex_unlock(&dev->mutex);
+
+	return fixed_size_offset;
+}
+
 struct file_operations aesd_fops = {
     .owner =          THIS_MODULE,
     .read =           aesd_read,
@@ -278,6 +371,7 @@ void aesd_cleanup_module(void)
 			kfree(entry->buffptr);
 		}
 	}
+	kfree(&aesd_device.entry);
 
 	mutex_destroy(&aesd_device.mutex);
 
