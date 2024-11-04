@@ -149,6 +149,7 @@ void* threadFunc(void* thread_func_args)
 			if (fd ==-1) 
 			{
 				syslog(LOG_ERR, "Error: (%s) while opening %s", strerror(errno), FILE_PATH);
+				pthread_mutex_unlock(thread_param->writeMutex);
 				return thread_func_args;
 			}
 			
@@ -168,6 +169,8 @@ void* threadFunc(void* thread_func_args)
 			
 			if (bytesRead < 0){
 				syslog(LOG_ERR, "Error: (%s) while reading from %s", strerror(errno), FILE_PATH);
+				/* Mutex unlock file writting */
+				pthread_mutex_unlock(thread_param->writeMutex);
 				return thread_func_args;
 			} 
 			

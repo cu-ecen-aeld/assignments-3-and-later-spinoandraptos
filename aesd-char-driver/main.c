@@ -118,7 +118,7 @@ ssize_t aesd_write(struct file *filp, const char __user *buf, size_t count,
                 loff_t *f_pos)
 {
 	ssize_t retval = -ENOMEM;
-	//PDEBUG("write %zu bytes with offset %lld",count,*f_pos);
+	PDEBUG("write %zu bytes with offset %lld",count,*f_pos);
 	
     	// Invalid arguments
 	if (filp == NULL || buf == NULL || f_pos == NULL){
@@ -136,6 +136,7 @@ ssize_t aesd_write(struct file *filp, const char __user *buf, size_t count,
 
 	// Copy data to be written from user space
 	unsigned long bytes_not_copied = copy_from_user(data, buf, count);
+	PDEBUG("Data: %s", data);
 	
 	if (bytes_not_copied != 0) {
 		PDEBUG("Unable to copy data from user space");
@@ -160,6 +161,7 @@ ssize_t aesd_write(struct file *filp, const char __user *buf, size_t count,
 	struct aesd_dev *dev = filp->private_data;
 	if (dev == NULL) {
 		PDEBUG("Device cannot be accessed");
+		kfree(data);
 		return -EINVAL;
 	}
 
@@ -179,7 +181,7 @@ ssize_t aesd_write(struct file *filp, const char __user *buf, size_t count,
 	char *new_entry_loc = krealloc(dev->entry.buffptr, dev->entry.size, GFP_KERNEL);
 	
 	if (new_entry_loc == NULL) {
-		PDEBUG("Unable to reallocate memory\n");
+		PDEBUG("Unable to reallocate memory");
 		kfree(data);
 		mutex_unlock(&dev->mutex);
 		return -ENOMEM;
@@ -194,8 +196,8 @@ ssize_t aesd_write(struct file *filp, const char __user *buf, size_t count,
 	// Write complete
 	if (write_complete) {
 		// Add entry to circular buffer
-		aesd_circular_buffer_add_entry(&(dev->buffer), &(dev->entry));
-		
+		aesd_circular_buffer_add_entry(&dev->buffer, &dev->entry);
+		PDEBUG("Entry added to buffer");
 		// Reset device entry
 		dev->entry.size = 0;
 		dev->entry.buffptr = NULL;
@@ -237,6 +239,7 @@ long aesd_ioctl(struct file *filp, unsigned int cmd, unsigned long arg){
 		
 		if (bytes_not_copied != 0) {
 			PDEBUG("Unable to copy arg from user space");
+			mutex_unlock(&dev->mutex);
 			return -EFAULT;
 		}
 		
@@ -264,9 +267,11 @@ long aesd_ioctl(struct file *filp, unsigned int cmd, unsigned long arg){
 		
 		// Update file position pointer to new offset
 		filp->f_pos = new_offset;
+		mutex_unlock(&dev->mutex);
 		return 0;
 	}
 	else {
+		mutex_unlock(&dev->mutex);
 		return -ENOTTY;
 	}
 }
@@ -377,7 +382,7 @@ void aesd_cleanup_module(void)
      	struct aesd_buffer_entry *entry;
 	uint8_t index = 0;
      	AESD_CIRCULAR_BUFFER_FOREACH(entry, &aesd_device.buffer, index){
-		if(entry->buffptr != NULL){
+		if(entry->buffptr){
 			kfree(entry->buffptr);
 		}
 	}
