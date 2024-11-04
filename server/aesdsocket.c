@@ -22,6 +22,7 @@
 
 #define TCP_PORT "9000" /* Port for socket cnnection */
 #define BACKLOG 5     /* Number of pending connections in queue */
+#define USE_AESD_CHAR_DEVICE 1
 #ifdef USE_AESD_CHAR_DEVICE
 	#define FILE_PATH "/dev/aesdchar" /* File to write data to and send data from */
 #else
@@ -81,11 +82,10 @@ void* threadFunc(void* thread_func_args)
 			pthread_mutex_unlock(thread_param->writeMutex);
 			return thread_func_args;
 		}
-		
 	    	/* If string sent over the socket equals AESDCHAR_IOCSEEKTO:X,Y, do not write */
-		if (strstr("AESDCHAR_IOCSEEKTO:", inBuf) != NULL){
+		if (strstr(inBuf, "AESDCHAR_IOCSEEKTO:") != NULL){
 		
-			const char *loc = strstr("AESDCHAR_IOCSEEKTO:", inBuf);
+			const char *loc = strstr(inBuf, "AESDCHAR_IOCSEEKTO:");
 		
 			/* Construct seekto struct */
 			struct aesd_seekto seek_details;
@@ -192,6 +192,7 @@ void* threadFunc(void* thread_func_args)
 /* Thread function to write timestamps into file */
 void* timeStampFunc(void* thread_func_args)
 {
+	#ifndef USE_AESD_CHAR_DEVICE
     	time_t t;
     	struct tm *tmp;
     	int rc = 0;
@@ -267,6 +268,7 @@ void* timeStampFunc(void* thread_func_args)
     	
     	/* Indicate thread completed successfully */
     	thread_param->threadCompleteSuccess = true;
+	#endif
 	return thread_func_args;
 }
 
@@ -387,30 +389,29 @@ int main(int argc, char** argv){
 	    	exit(-1);
 	}
 	
-	#ifndef USE_AESD_CHAR_DEVICE
-		/* Create a new thread for the connection */
-		pthread_t timeStampThread;
-		
-		/* Initialise threadParams data struct dynamically */
-		struct timeStampThread *timeStampthreadParams = (struct timeStampThread*) malloc(sizeof(struct timeStampThread));
-		
-		/* Populate data struct with arguments to the function */
-		timeStampthreadParams->thread = &timeStampThread;		
-		timeStampthreadParams->writeMutex = &writeMutex;
-		timeStampthreadParams->threadCompleteSuccess = false;
-		
-		/* Start timestamp thread using default attributes (NULL) and threadFunc with no params */
-		int rc = pthread_create(&timeStampThread,
-					NULL, 
-					timeStampFunc,
-					timeStampthreadParams);
-					 
-	    	/* Unsuccessful thread creation */
-		if ( rc != 0 ) {
-		    	free(timeStampthreadParams);
-			syslog(LOG_ERR,"Creation of thread %lu failed with code %d\n",timeStampThread, rc);
-		}
-	#endif
+	/* Create a new thread for the connection */
+	pthread_t timeStampThread;
+	
+	/* Initialise threadParams data struct dynamically */
+	struct timeStampThread *timeStampthreadParams = (struct timeStampThread*) malloc(sizeof(struct timeStampThread));
+	
+	/* Populate data struct with arguments to the function */
+	timeStampthreadParams->thread = &timeStampThread;		
+	timeStampthreadParams->writeMutex = &writeMutex;
+	timeStampthreadParams->threadCompleteSuccess = false;
+	
+	/* Start timestamp thread using default attributes (NULL) and threadFunc with no params */
+	int rc = pthread_create(&timeStampThread,
+				NULL, 
+				timeStampFunc,
+				timeStampthreadParams);
+				 
+    	/* Unsuccessful thread creation */
+	if ( rc != 0 ) {
+	    	free(timeStampthreadParams);
+		syslog(LOG_ERR,"Creation of thread %lu failed with code %d\n",timeStampThread, rc);
+	}
+	
 	/* Restarts accepting connections from new clients forever in a loop until SIGINT or SIGTERM is received */
 	while(1) {
 	
@@ -498,11 +499,6 @@ int main(int argc, char** argv){
 	}
  	close(sockfd);
     	
-    	#ifndef USE_AESD_CHAR_DEVICE
-	    	/* Free time stamp thread */
-	    	pthread_join(timeStampThread,NULL);
-	    	free(timeStampthreadParams);
-    	#endif
     	
 	/* Terminate logger connection */
 	closelog ();

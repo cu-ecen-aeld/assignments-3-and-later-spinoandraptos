@@ -194,7 +194,7 @@ ssize_t aesd_write(struct file *filp, const char __user *buf, size_t count,
 	// Write complete
 	if (write_complete) {
 		// Add entry to circular buffer
-		aesd_circular_buffer_add_entry(&dev->buffer, &dev->entry);
+		aesd_circular_buffer_add_entry(&(dev->buffer), &(dev->entry));
 		
 		// Reset device entry
 		dev->entry.size = 0;
@@ -206,7 +206,7 @@ ssize_t aesd_write(struct file *filp, const char __user *buf, size_t count,
 	// Release data
 	kfree(data);
 	
-	return newline_pos;
+	return 0;
 }
 
 long aesd_ioctl(struct file *filp, unsigned int cmd, unsigned long arg){
@@ -239,13 +239,13 @@ long aesd_ioctl(struct file *filp, unsigned int cmd, unsigned long arg){
 		}
 		
 		// If write cmd out of range of the number of write commands, error
-		if (seek_details.write_cmd >= AESDCHAR_MAX_WRITE_OPERATIONS_SUPPORTED) {
+		if (seek_details.write_cmd > AESDCHAR_MAX_WRITE_OPERATIONS_SUPPORTED) {
 			PDEBUG("Out of range write command");
 			mutex_unlock(&dev->mutex);
 			return -EINVAL; 
 		}
 		// If write cmd offset out of range of the command length, error
-		else if (seek_details.write_cmd_offset >= dev->buffer.entry[seek_details.write_cmd].size) {
+		else if (seek_details.write_cmd_offset > dev->buffer.entry[seek_details.write_cmd].size) {
 			PDEBUG("Out of range write offset");
 			mutex_unlock(&dev->mutex);
 			return -EINVAL;
