@@ -118,7 +118,7 @@ ssize_t aesd_write(struct file *filp, const char __user *buf, size_t count,
                 loff_t *f_pos)
 {
 	ssize_t retval = -ENOMEM;
-	PDEBUG("write %zu bytes with offset %lld",count,*f_pos);
+	//PDEBUG("write %zu bytes with offset %lld",count,*f_pos);
 	
     	// Invalid arguments
 	if (filp == NULL || buf == NULL || f_pos == NULL){
@@ -220,6 +220,8 @@ long aesd_ioctl(struct file *filp, unsigned int cmd, unsigned long arg){
 	
 	if (cmd == AESDCHAR_IOCSEEKTO){
 		
+		PDEBUG("IOCTL Detected");
+		
 		// Try to lock the device mutex
 		int res = mutex_lock_interruptible(&dev->mutex);
 		if (res != 0){
@@ -251,6 +253,8 @@ long aesd_ioctl(struct file *filp, unsigned int cmd, unsigned long arg){
 			return -EINVAL;
 		}
 		
+		PDEBUG("seek command: %d, %d", seek_details.write_cmd, seek_details.write_cmd_offset);
+		
 		// Seek to start of command and add the offset within the command
 		loff_t new_offset = 0;
 		for (int i = 0; i < seek_details.write_cmd; i++) {
@@ -268,6 +272,8 @@ long aesd_ioctl(struct file *filp, unsigned int cmd, unsigned long arg){
 }
 
 loff_t aesd_llseek(struct file *filp, loff_t offset, int whence){
+
+	PDEBUG("llseek Triggered");
 
 	// Get device
 	struct aesd_dev *dev = filp->private_data;
@@ -288,13 +294,17 @@ loff_t aesd_llseek(struct file *filp, loff_t offset, int whence){
      	struct aesd_buffer_entry *entry;
 	uint8_t index = 0;
      	AESD_CIRCULAR_BUFFER_FOREACH(entry, &dev->buffer, index){
-	    	if (entry->buffptr){
-	    		total_size += entry->size;
-	    	}
+     		if(entry->buffptr){
+    			total_size += entry->size;
+		}
 	}
+	
+	PDEBUG("total_size: %d", total_size);
 	
 	// Reposition offset for fixed-sized device 
 	loff_t fixed_size_offset = fixed_size_llseek(filp, offset, whence, total_size);
+	
+	PDEBUG("llseek offset: %d", fixed_size_offset);
 	
 	mutex_unlock(&dev->mutex);
 

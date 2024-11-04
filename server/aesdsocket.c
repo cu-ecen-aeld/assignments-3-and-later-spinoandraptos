@@ -98,6 +98,7 @@ void* threadFunc(void* thread_func_args)
 			
 			/* ioctl call */
 			ioctl(fd, AESDCHAR_IOCSEEKTO, (unsigned long)&seek_details);
+			syslog(LOG_DEBUG, "IOCTL Call with %d %d", seek_details.write_cmd, seek_details.write_cmd_offset);
 
 		} 
 	    	else {	
@@ -476,7 +477,9 @@ int main(int argc, char** argv){
 		struct threadListEntry *entry, *tempEntry;
 		SLIST_FOREACH_SAFE(entry, &head, nextThread, tempEntry){
 			if(entry->thread_data->threadCompleteSuccess) {
+				syslog(LOG_DEBUG, "Trying to join thread: %ld", entry->thread_data->thread);
 				pthread_join(entry->thread_data->thread,NULL);
+				syslog(LOG_DEBUG, "Joined thread: %ld", entry->thread_data->thread);
 				close(entry->thread_data->connFd);
 				SLIST_REMOVE(&head, entry, threadListEntry, nextThread);
 				numThreads--;
@@ -499,6 +502,8 @@ int main(int argc, char** argv){
 	}
  	close(sockfd);
     	
+    	pthread_join(timeStampThread, NULL);
+    	free(timeStampthreadParams);
     	
 	/* Terminate logger connection */
 	closelog ();
