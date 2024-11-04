@@ -386,7 +386,6 @@ void aesd_cleanup_module(void)
 			kfree(entry->buffptr);
 		}
 	}
-	kfree(&aesd_device.entry);
 
 	mutex_destroy(&aesd_device.mutex);
 
