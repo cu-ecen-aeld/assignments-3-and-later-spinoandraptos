@@ -201,8 +201,22 @@ void* threadFunc(void* thread_func_args)
 	        thread_param->threadCompleteSuccess = true;
 		return thread_func_args;
     	}
+    	
+    	close(fd);
 	
 	if (!custom_llseek){
+	
+		int fd = open(FILE_PATH, O_RDWR | O_CREAT, S_IRWXU | S_IRGRP | S_IROTH);
+		/* Error opening file: error printed and logged and program terminates with status 1 */
+		if (fd ==-1) {
+			syslog(LOG_ERR, "Error: (%s) while opening %s", strerror(errno), FILE_PATH);
+			pthread_mutex_unlock(thread_param->writeMutex);
+			free(inBuf);
+			close(thread_param->connFd);
+			thread_param->threadCompleteSuccess = true;
+			return thread_func_args;
+		}
+		
 		/* Reset offset to start of file for read */
 		lseek(fd, 0, SEEK_SET);
 		
@@ -233,11 +247,12 @@ void* threadFunc(void* thread_func_args)
 				return thread_func_args;
 			}
 		}	
+		
+		close(fd);
 	}
 	
 	free(inBuf);
 	close(thread_param->connFd);
-	close(fd);
 	syslog(LOG_DEBUG, "Closed connection from %s", ipv4Addr);
     	
     	/* Indicate thread completed successfully */
