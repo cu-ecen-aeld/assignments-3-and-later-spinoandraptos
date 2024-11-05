@@ -12,8 +12,8 @@ struct connThread {
 	/* Socket fd identifier for the connection */
     	int connFd ; 
     	
-    	/* Pointer to created thread */
-    	pthread_t *thread;
+    	/* Created thread */
+    	pthread_t thread;
     	
     	/* Address of connecting client */
     	struct sockaddr_storage incomingAddr;

@@ -17,19 +17,21 @@
 #include "queue.h"
 #include <time.h>
 #include "aesdsocket.h"
+#include <sys/ioctl.h>
+#include "aesd_ioctl.h"
 
 #define TCP_PORT "9000" /* Port for socket cnnection */
 #define BACKLOG 5     /* Number of pending connections in queue */
+#define USE_AESD_CHAR_DEVICE 1
 #ifdef USE_AESD_CHAR_DEVICE
 	#define FILE_PATH "/dev/aesdchar" /* File to write data to and send data from */
 #else
 	#define FILE_PATH "/var/tmp/aesdsocketdata" /* File to write data to and send data from */
 #endif
-#define BUFFERSIZE 500 /* Buffer for storing received data from client */
+#define BUFFERSIZE 1024 /* Buffer for storing received data from client */
 #define TIMESTAMP_DUR 10 /* Period of writing timestamp (seconds) */
 
 static volatile bool signal_caught = false;
-int totalBytes = 0;
 
 /* Signal handler for SIGINT and SIGTERM,  save a copy of errno to restore later. */
 static void signalHandler(int signal_number){
@@ -54,106 +56,202 @@ void* threadFunc(void* thread_func_args)
     	const char *res = inet_ntop(thread_param->incomingAddr.ss_family, &binAddr, ipv4Addr, sizeof(ipv4Addr));
     	if (res == NULL){
 		syslog(LOG_ERR, "Error converting client IP Address with error: %s", strerror(errno));
+	        close(thread_param->connFd);
+		thread_param->threadCompleteSuccess = true;
 		return thread_func_args;
     	}
 	syslog(LOG_DEBUG, "Accepted connection from %s", ipv4Addr);
 	
 	/* Receive latest data packet from client into buffer */
 	int bytesRead  = 0;
-	char inBuf[BUFFERSIZE];
+	char *inBuf = (char *)malloc(sizeof(char) * BUFFERSIZE);
+	int curr_pos = 0;
 	bool endStream = false;
+	bool custom_llseek = false;
 	int rc = 0;
+	
+	int fd = open(FILE_PATH, O_RDWR | O_CREAT, S_IRWXU | S_IRGRP | S_IROTH);
+	/* Error opening file: error printed and logged and program terminates with status 1 */
+	if (fd ==-1) {
+		syslog(LOG_ERR, "Error: (%s) while opening %s", strerror(errno), FILE_PATH);
+		pthread_mutex_unlock(thread_param->writeMutex);
+	        free(inBuf);
+	        close(thread_param->connFd);
+		thread_param->threadCompleteSuccess = true;
+		return thread_func_args;
+	}
 	
 	/* While data comes in through the stream */
 	while(!endStream){
-		bytesRead = recv(thread_param->connFd, inBuf, sizeof(inBuf), 0);
+	
+		bytesRead = recv(thread_param->connFd, inBuf + curr_pos, sizeof(char) * (BUFFERSIZE - curr_pos), 0);
+		syslog(LOG_DEBUG, "Inbuf: %s",inBuf);
 		if(bytesRead <= 0){
-			endStream = true;
 			break;
 		}
-		totalBytes += bytesRead;
+		curr_pos += bytesRead;
+		if (curr_pos >= BUFFERSIZE)
+		{
+			char *new_inBuf = (char *)realloc(inBuf, sizeof(char) * (curr_pos + BUFFERSIZE));
+			if (new_inBuf ==  NULL)
+			{
+			    syslog(LOG_ERR, "Error: (%s) while reallocating memory", strerror(errno));
+			    free(inBuf);
+			    close(thread_param->connFd);
+			    close(fd);
+			    thread_param->threadCompleteSuccess = true;
+			    return thread_func_args;
+			}
+			
+			inBuf = new_inBuf;
+		}
 		
-		/* Mutex lock file writting */
-		rc = pthread_mutex_lock(thread_param->writeMutex);
-		if ( rc != 0 ) {
-			syslog(LOG_ERR, "Mutex procurement failed with code %d\n",rc);
-			return thread_func_args;
-	    	}
+		/* If the received data contains newline, full data packet received and send back full file content */
+		if (memchr(inBuf, '\n', bytesRead) != NULL) {
+			endStream = true;
+		}
 		
-		/* Append received data to file /var/tmp/aesdsocketdata */
-		int fd = open(FILE_PATH, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
+		
+	    	/* If string sent over the socket equals AESDCHAR_IOCSEEKTO:X,Y, do not write */
+		if (strstr(inBuf, "AESDCHAR_IOCSEEKTO:") != NULL){
+		
+			custom_llseek = true;
+		
+			const char *loc = strstr(inBuf, "AESDCHAR_IOCSEEKTO:");
+		
+			/* Construct seekto struct */
+			struct aesd_seekto seek_details;
+			
+			/* Extract X and Y */
+			char *cmd = strtok((char *)loc + 19, ",");
+			seek_details.write_cmd = atoi(cmd);
+			cmd = strtok(NULL, ",");
+			seek_details.write_cmd_offset = atoi(cmd);
+			
+			/* ioctl call */
+			syslog(LOG_DEBUG, "IOCTL Call with %d %d", seek_details.write_cmd, seek_details.write_cmd_offset);
+			ioctl(fd, AESDCHAR_IOCSEEKTO, (unsigned long)&seek_details);
+			
+			char outBuf[BUFFERSIZE];
+		    				
+			while(1){
+				bytesRead = read(fd, outBuf, BUFFERSIZE);
+				if (bytesRead == 0){
+					break;
+				} 
+				if (bytesRead < 0){
+					syslog(LOG_ERR, "Error: (%s) while reading from %s", strerror(errno), FILE_PATH);
+					free(inBuf);
+					close(thread_param->connFd);
+					close(fd);
+					thread_param->threadCompleteSuccess = true;
+					return thread_func_args;
+				} 
+				syslog(LOG_DEBUG, "Outbuf: %s", outBuf);
+				int bytesSent = send(thread_param->connFd, outBuf, bytesRead, 0);
+				if (bytesSent < bytesRead) {
+				    syslog(LOG_ERR, "Error sending file contents over socket connection.");
+				    free(inBuf);
+				    close(thread_param->connFd);
+				    close(fd);
+				    thread_param->threadCompleteSuccess = true;
+				    return thread_func_args;
+				}
+			}
+			
+		} 
+	}	
+	    	
+	/* Mutex lock file writting */
+	rc = pthread_mutex_lock(thread_param->writeMutex);
+	if ( rc != 0 ) {
+		syslog(LOG_ERR, "Mutex procurement failed with code %d\n",rc);
+	        free(inBuf);
+	        close(thread_param->connFd);
+	        close(fd);
+	        thread_param->threadCompleteSuccess = true;
+		return thread_func_args;
+    	}
+
+	/* Append received data to file /var/tmp/aesdsocketdata */		
+	int bytesWritten = write(fd, inBuf, bytesRead);
+	syslog(LOG_DEBUG, "Bytes written to file %d",bytesWritten);
+	/* Error writing to file */
+	if (bytesWritten==-1){
+		syslog(LOG_ERR, "Error: (%s) while writing to %s", strerror(errno), FILE_PATH);
+		pthread_mutex_unlock(thread_param->writeMutex);
+	        free(inBuf);
+	        close(thread_param->connFd);
+	        close(fd);
+	        thread_param->threadCompleteSuccess = true;
+		return thread_func_args;
+	} 
+	/* Incomplete write to file */
+	else if (bytesWritten < bytesRead){
+		syslog(LOG_ERR, "Error: Incomplete write to %s, expected: %d bytes but wrote: %d bytes", FILE_PATH, bytesRead, bytesWritten);
+	}
+	
+	/* Mutex unlock file writting */
+	rc = pthread_mutex_unlock(thread_param->writeMutex);
+	if ( rc != 0 ) {
+		syslog(LOG_ERR, "Mutex release failed with code %d",rc);
+	        free(inBuf);
+	        close(thread_param->connFd);
+	        close(fd);
+	        thread_param->threadCompleteSuccess = true;
+		return thread_func_args;
+    	}
+    	fsync(fd);
+    	close(fd);
+	
+	if (!custom_llseek){
+	
+		int fd = open(FILE_PATH, O_RDWR | O_CREAT, S_IRWXU | S_IRGRP | S_IROTH);
 		/* Error opening file: error printed and logged and program terminates with status 1 */
 		if (fd ==-1) {
 			syslog(LOG_ERR, "Error: (%s) while opening %s", strerror(errno), FILE_PATH);
+			pthread_mutex_unlock(thread_param->writeMutex);
+			free(inBuf);
+			close(thread_param->connFd);
+			thread_param->threadCompleteSuccess = true;
 			return thread_func_args;
 		}
-			
-		lseek(fd, 0, SEEK_END);
-		int bytesWritten = write(fd, &inBuf, bytesRead);
-		/* Error writing to file */
-		if (bytesWritten==-1){
-			syslog(LOG_ERR, "Error: (%s) while writing to %s", strerror(errno), FILE_PATH);
-			return thread_func_args;
-		} 
-		/* Incomplete write to file */
-		else if (bytesWritten < bytesRead){
-			syslog(LOG_ERR, "Error: Incomplete write to %s, expected: %d bytes but wrote: %d bytes", FILE_PATH, bytesRead, bytesWritten);
-		}
-	        close(fd);
-	        
-		/* Mutex unlock file writting */
-		rc = pthread_mutex_unlock(thread_param->writeMutex);
-		if ( rc != 0 ) {
-			syslog(LOG_ERR, "Mutex release failed with code %d\n",rc);
-			return thread_func_args;
-	    	}
-
 		
-		/* If the received data contains newline, full data packet received and send back full file content */
-		if (memchr(inBuf, '\n', bytesRead) != NULL){
-				
-			/* Mutex lock file writting */
-			rc = pthread_mutex_lock(thread_param->writeMutex);
-			if ( rc != 0 ) {
-				syslog(LOG_ERR, "Mutex procurement failed with code %d\n",rc);
-				return thread_func_args;
-		    	}
+		/* Reset offset to start of file for read */
+		lseek(fd, 0, SEEK_SET);
 		
-			/* Read total data from file /var/tmp/aesdsocketdata */
-			int fd = open(FILE_PATH, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
-			/* Error opening file: error printed and logged and program terminates with status 1 */
-			if (fd ==-1) 
-			{
-				syslog(LOG_ERR, "Error: (%s) while opening %s", strerror(errno), FILE_PATH);
-				return thread_func_args;
-			}
-			
-			/* Reset offset to start of file for read */
-			lseek(fd, 0, SEEK_SET);
-			char outBuf[totalBytes];
-		    				
-			int bytesInFile = read(fd, &outBuf, totalBytes);
-			if (bytesInFile < 0){
+		char outBuf[BUFFERSIZE];
+	    				
+		while(1){
+			bytesRead = read(fd, outBuf, BUFFERSIZE);
+			if (bytesRead == 0){
+				break;
+			} 
+			if (bytesRead < 0){
 				syslog(LOG_ERR, "Error: (%s) while reading from %s", strerror(errno), FILE_PATH);
+				free(inBuf);
+				close(thread_param->connFd);
+				close(fd);
+				thread_param->threadCompleteSuccess = true;
 				return thread_func_args;
 			} 
-			close(fd);
-			
-			/* Mutex unlock file writting */
-			rc = pthread_mutex_unlock(thread_param->writeMutex);
-			if ( rc != 0 ) {
-				syslog(LOG_ERR, "Mutex release failed with code %d\n",rc);
+			syslog(LOG_DEBUG, "Outbuf: %s", outBuf);
+			int bytesSent = send(thread_param->connFd, outBuf, bytesRead, 0);
+			syslog(LOG_DEBUG, "Bytes sent to socket %d",bytesSent);
+			if (bytesSent < bytesRead) {
+				syslog(LOG_ERR, "Error sending file contents over socket connection.");
+				free(inBuf);
+				close(thread_param->connFd);
+				close(fd);
+				thread_param->threadCompleteSuccess = true;
 				return thread_func_args;
-		    	}
-			
-			int bytesSent = send(thread_param->connFd, &outBuf, bytesInFile, 0);
-			if (bytesSent != bytesInFile) {
-			    syslog(LOG_ERR, "Error sending file contents over socket connection.");
-			    return thread_func_args;
 			}
-		}
-	}	
+		}	
 		
+		close(fd);
+	}
+	
+	free(inBuf);
 	close(thread_param->connFd);
 	syslog(LOG_DEBUG, "Closed connection from %s", ipv4Addr);
     	
@@ -165,6 +263,7 @@ void* threadFunc(void* thread_func_args)
 /* Thread function to write timestamps into file */
 void* timeStampFunc(void* thread_func_args)
 {
+	#ifndef USE_AESD_CHAR_DEVICE
     	time_t t;
     	struct tm *tmp;
     	int rc = 0;
@@ -240,6 +339,7 @@ void* timeStampFunc(void* thread_func_args)
     	
     	/* Indicate thread completed successfully */
     	thread_param->threadCompleteSuccess = true;
+	#endif
 	return thread_func_args;
 }
 
@@ -360,30 +460,29 @@ int main(int argc, char** argv){
 	    	exit(-1);
 	}
 	
-	#ifndef USE_AESD_CHAR_DEVICE
-		/* Create a new thread for the connection */
-		pthread_t timeStampThread;
-		
-		/* Initialise threadParams data struct dynamically */
-		struct timeStampThread *timeStampthreadParams = (struct timeStampThread*) malloc(sizeof(struct timeStampThread));
-		
-		/* Populate data struct with arguments to the function */
-		timeStampthreadParams->thread = &timeStampThread;		
-		timeStampthreadParams->writeMutex = &writeMutex;
-		timeStampthreadParams->threadCompleteSuccess = false;
-		
-		/* Start timestamp thread using default attributes (NULL) and threadFunc with no params */
-		int rc = pthread_create(&timeStampThread,
-					NULL, 
-					timeStampFunc,
-					timeStampthreadParams);
-					 
-	    	/* Unsuccessful thread creation */
-		if ( rc != 0 ) {
-		    	free(timeStampthreadParams);
-			syslog(LOG_ERR,"Creation of thread %lu failed with code %d\n",timeStampThread, rc);
-		}
-	#endif
+	/* Create a new thread for the connection */
+	pthread_t timeStampThread;
+	
+	/* Initialise threadParams data struct dynamically */
+	struct timeStampThread *timeStampthreadParams = (struct timeStampThread*) malloc(sizeof(struct timeStampThread));
+	
+	/* Populate data struct with arguments to the function */
+	timeStampthreadParams->thread = &timeStampThread;		
+	timeStampthreadParams->writeMutex = &writeMutex;
+	timeStampthreadParams->threadCompleteSuccess = false;
+	
+	/* Start timestamp thread using default attributes (NULL) and threadFunc with no params */
+	int rc = pthread_create(&timeStampThread,
+				NULL, 
+				timeStampFunc,
+				timeStampthreadParams);
+				 
+    	/* Unsuccessful thread creation */
+	if ( rc != 0 ) {
+	    	free(timeStampthreadParams);
+		syslog(LOG_ERR,"Creation of thread %lu failed with code %d\n",timeStampThread, rc);
+	}
+	
 	/* Restarts accepting connections from new clients forever in a loop until SIGINT or SIGTERM is received */
 	while(1) {
 	
@@ -410,28 +509,12 @@ int main(int argc, char** argv){
 		/* Initialise threadParams data struct dynamically */
 		struct connThread *threadParams = (struct connThread*) malloc(sizeof(struct connThread));
 		
-		/* Populate data struct with arguments to the function */
 		threadParams->connFd = connFd;
-		threadParams->thread = &connThread;		
 		threadParams->incomingAddr = incomingAddr;
         	threadParams->writeMutex = &writeMutex;
         	threadParams->threadCompleteSuccess = false;
-        			
-		/* Add thread to linked list */
-		struct threadListEntry *threadEntry = malloc(sizeof(struct threadListEntry));
-		threadEntry->thread_data = threadParams;
-		if(head.slh_first == NULL) {
-			/* Empty list, insert at head */
-			SLIST_INSERT_HEAD(&head, threadEntry, nextThread);
-		}
-		else {
-			/* Non-empty list, insert after head */
-			SLIST_INSERT_AFTER(head.slh_first, threadEntry, nextThread);
-		}
-		numThreads++;
-
-        	
-        	/* Start given thread using default attributes (NULL) and threadFunc with populated threadParams */
+		
+		/* Start given thread using default attributes (NULL) and threadFunc with populated threadParams */
 		rc = pthread_create(&connThread,
 				        NULL, 
 				        threadFunc,
@@ -439,20 +522,30 @@ int main(int argc, char** argv){
 	    	
 	    	/* Unsuccessful thread creation */
 		if ( rc != 0 ) {
+			close(threadParams->connFd);
 		    	free(threadParams);
-		    	free(threadEntry);
 			syslog(LOG_ERR,"Creation of thread %lu failed with code %d\n",connThread, rc);
 		}
+		
+		/* Populate data struct with arguments to the function */
+		threadParams->thread = connThread;		
+        			
+		/* Add thread to linked list */
+		struct threadListEntry *threadEntry = malloc(sizeof(struct threadListEntry));
+		threadEntry->thread_data = threadParams;
+
+		SLIST_INSERT_HEAD(&head, threadEntry, nextThread);
+		numThreads++;
 		
 		/* Remove any finished thread from linked list and free memory*/
 		struct threadListEntry *entry, *tempEntry;
 		SLIST_FOREACH_SAFE(entry, &head, nextThread, tempEntry){
 			if(entry->thread_data->threadCompleteSuccess) {
-				pthread_join(*(entry->thread_data->thread),NULL);
-				close(entry->thread_data->connFd);
+				syslog(LOG_DEBUG, "Trying to join thread: %ld", entry->thread_data->thread);
+				pthread_join(entry->thread_data->thread,NULL);
+				syslog(LOG_DEBUG, "Joined thread: %ld", entry->thread_data->thread);
 				SLIST_REMOVE(&head, entry, threadListEntry, nextThread);
 				numThreads--;
-				free(entry->thread_data);
 				free(entry);
 			}
 		}
@@ -460,22 +553,20 @@ int main(int argc, char** argv){
     	}
     	
     	/* Gracefully exit: completed all open connections, closed any open sockets, and deleted the file /var/tmp/aesdsocketdata. */
-	struct threadListEntry *entry, *tempEntry;
- 	SLIST_FOREACH_SAFE(entry, &head, nextThread, tempEntry){
-		pthread_join(*(entry->thread_data->thread),NULL);
+	struct threadListEntry *entry;
+	while (!SLIST_EMPTY(&head))
+	{
+		entry = SLIST_FIRST(&head);
 		close(entry->thread_data->connFd);
-		SLIST_REMOVE(&head, entry, threadListEntry, nextThread);
-		numThreads--;
-		free(entry->thread_data);
+		pthread_join(entry->thread_data->thread,NULL);
+		SLIST_REMOVE_HEAD(&head, nextThread);
 		free(entry);
 	}
  	close(sockfd);
     	
-    	#ifndef USE_AESD_CHAR_DEVICE
-	    	/* Free time stamp thread */
-	    	pthread_join(timeStampThread,NULL);
-	    	free(timeStampthreadParams);
-    	#endif
+    	pthread_mutex_destroy(&writeMutex);
+    	pthread_join(timeStampThread, NULL);
+    	free(timeStampthreadParams);
     	
 	/* Terminate logger connection */
 	closelog ();
