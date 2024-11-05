@@ -223,6 +223,7 @@ void* threadFunc(void* thread_func_args)
 			} 
 			syslog(LOG_DEBUG, "Outbuf: %s", outBuf);
 			int bytesSent = send(thread_param->connFd, outBuf, bytesRead, 0);
+			syslog(LOG_DEBUG, "Bytes sent to socket %d",bytesSent);
 			if (bytesSent < bytesRead) {
 				syslog(LOG_ERR, "Error sending file contents over socket connection.");
 				free(inBuf);
