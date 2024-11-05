@@ -201,7 +201,7 @@ void* threadFunc(void* thread_func_args)
 	        thread_param->threadCompleteSuccess = true;
 		return thread_func_args;
     	}
-    	
+    	fsync(fd);
     	close(fd);
 	
 	if (!custom_llseek){
