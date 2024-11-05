@@ -208,7 +208,7 @@ ssize_t aesd_write(struct file *filp, const char __user *buf, size_t count,
 	// Release data
 	kfree(data);
 	
-	return 0;
+	return newline_pos;
 }
 
 long aesd_ioctl(struct file *filp, unsigned int cmd, unsigned long arg){
