@@ -535,19 +535,7 @@ int main(int argc, char** argv){
 
 		SLIST_INSERT_HEAD(&head, threadEntry, nextThread);
 		numThreads++;
-		
-		/* Remove any finished thread from linked list and free memory*/
-		struct threadListEntry *entry, *tempEntry;
-		SLIST_FOREACH_SAFE(entry, &head, nextThread, tempEntry){
-			if(entry->thread_data->threadCompleteSuccess) {
-				syslog(LOG_DEBUG, "Trying to join thread: %ld", entry->thread_data->thread);
-				pthread_join(entry->thread_data->thread,NULL);
-				syslog(LOG_DEBUG, "Joined thread: %ld", entry->thread_data->thread);
-				SLIST_REMOVE(&head, entry, threadListEntry, nextThread);
-				numThreads--;
-				free(entry);
-			}
-		}
+	
 	     	syslog(LOG_DEBUG, "Current threads number: %d", numThreads);
     	}
     	
