@@ -85,6 +85,7 @@ void* threadFunc(void* thread_func_args)
 	while(!endStream){
 	
 		bytesRead = recv(thread_param->connFd, inBuf + curr_pos, sizeof(char) * (BUFFERSIZE - curr_pos), 0);
+		syslog(LOG_DEBUG, "Inbuf: %s",inBuf);
 		if(bytesRead <= 0){
 			break;
 		}
@@ -174,6 +175,7 @@ void* threadFunc(void* thread_func_args)
 
 	/* Append received data to file /var/tmp/aesdsocketdata */		
 	int bytesWritten = write(fd, inBuf, bytesRead);
+	syslog(LOG_DEBUG, "Bytes written to file %d",bytesWritten);
 	/* Error writing to file */
 	if (bytesWritten==-1){
 		syslog(LOG_ERR, "Error: (%s) while writing to %s", strerror(errno), FILE_PATH);
@@ -192,7 +194,7 @@ void* threadFunc(void* thread_func_args)
 	/* Mutex unlock file writting */
 	rc = pthread_mutex_unlock(thread_param->writeMutex);
 	if ( rc != 0 ) {
-		syslog(LOG_ERR, "Mutex release failed with code %d\n",rc);
+		syslog(LOG_ERR, "Mutex release failed with code %d",rc);
 	        free(inBuf);
 	        close(thread_param->connFd);
 	        close(fd);
